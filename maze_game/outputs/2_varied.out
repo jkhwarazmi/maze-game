@@ -1,0 +1,31 @@
+Maze ./mazes/valid/4_nl_12x18.txt (12x18) successfully loaded
+
+Your move (WASD or M for the map): 
+You move right
+
+Your move (WASD or M for the map): 
+Please enter a valid direction (W, A, S or D to move or M to view the map)
+
+Your move (WASD or M for the map): 
+You move up
+
+Your move (WASD or M for the map): 
+Please enter a valid direction (W, A, S or D to move or M to view the map)
+
+Your move (WASD or M for the map): 
+You move down
+
+Your move (WASD or M for the map): 
+Please enter a valid direction (W, A, S or D to move or M to view the map)
+
+Your move (WASD or M for the map): 
+Please enter a valid direction (W, A, S or D to move or M to view the map)
+
+Your move (WASD or M for the map): 
+Please enter a valid direction (W, A, S or D to move or M to view the map)
+
+Your move (WASD or M for the map): 
+You move left
+
+Your move (WASD or M for the map): 
+Please enter a valid direction (W, A, S or D to move or M to view the map)

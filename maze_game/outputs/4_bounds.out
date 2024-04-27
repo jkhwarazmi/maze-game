@@ -1,0 +1,58 @@
+Maze ./mazes/valid/5_no_walls_5x5.txt (5x5) successfully loaded
+
+Your move (WASD or M for the map): 
+You move down
+
+Your move (WASD or M for the map): 
+You move down
+
+Your move (WASD or M for the map): 
+You move down
+
+Your move (WASD or M for the map): 
+You move down
+
+Your move (WASD or M for the map): 
+You cannot walk out of bounds
+
+Your move (WASD or M for the map): 
+You move up
+
+Your move (WASD or M for the map): 
+You cannot walk out of bounds
+
+Your move (WASD or M for the map): 
+You move left
+
+Your move (WASD or M for the map): 
+You move left
+
+Your move (WASD or M for the map): 
+You move left
+
+Your move (WASD or M for the map): 
+You move left
+
+Your move (WASD or M for the map): 
+You move left
+
+Your move (WASD or M for the map): 
+You cannot walk out of bounds
+
+Your move (WASD or M for the map): 
+You move down
+
+Your move (WASD or M for the map): 
+You move down
+
+Your move (WASD or M for the map): 
+You move down
+
+Your move (WASD or M for the map): 
+You move down
+
+Your move (WASD or M for the map): 
+You move down
+
+Your move (WASD or M for the map): 
+You cannot walk out of bounds
