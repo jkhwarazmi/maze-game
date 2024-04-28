@@ -1,3 +1,9 @@
+/**
+ * @file player.h
+ * @author Jamil Khwarazmi
+ * @brief ADD BRIEF DESCRIPTION HERE
+ */
+
 #ifndef PLAYER_H 
 #define PLAYER_H
 
@@ -8,16 +14,18 @@
  *        integer count of all valid moves.
  * 
 */
-typedef struct {
+typedef struct 
+{
     int y;
     int x;
     int moves;
 } Player;
 
 char get_move();
-void move_y(Maze *maze, Player *player, int direction);
-void move_x(Maze *maze, Player *player, int direction);
-void print_maze(Maze *maze, Player *player);
-int play_game(Maze *maze, Player *player);
+void move_y(Player *player, Maze *maze, int direction);
+void move_x(Player *player, Maze *maze, int direction);
+void print_maze(Player *player, Maze *maze);
+int play_game(Player *player, Maze *maze);
+int create_player(Player *player, Maze *maze);
 
 #endif /* PLAYER */

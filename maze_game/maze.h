@@ -1,9 +1,15 @@
+/**
+ * @file maze.h
+ * @author Jamil Khwarazmi
+ * @brief ADD BRIEF DESCRIPTION HERE
+ */
+
 #ifndef MAZE_H 
 #define MAZE_H
 
-// The minimum and maximum dimensions of the maze
-#define MIN 5
-#define MAX 100
+// Define the max and min permitted dimensions
+#define MIN_DIM 5
+#define MAX_DIM 100
 
 /**
  * @brief Struct to hold maze data, includes integer rows and columns, an
@@ -11,17 +17,23 @@
  *        maze, with a buffer of 10 to account for newlines and invalid mazes.
  *
 */
-typedef struct {
+typedef struct 
+{   
+    char **map;
     int rows;
     int cols;
-    int start[2];
-    int end[2];
-    char map[MAX + 10][MAX + 10];
+    int start[2]; // Which coord is which?
+    int end[2]; // Same here
+    
 } Maze;
 
+// Always have same order of maze/file throughout code
 void load_maze(FILE *file, Maze *maze);
-void check_maze_dimensions(int dimension, char *type);
-void check_maze_exits(int quantity, char *type);
-void validate_maze(Maze *maze);
+int check_maze_dimensions(int dimension, char *type);
+int check_maze_exits(int quantity, char *type);
+int validate_file(FILE *file, Maze *maze);
+int create_maze(Maze *maze);
+void free_maze(Maze *maze);
+int read_maze(Maze *maze, FILE *file);
 
 #endif /* MAZE_H */

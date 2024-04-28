@@ -1,9 +1,7 @@
 CC = gcc
-
-CFLAGS = -Wall -Werror -g
+CFLAGS = -Wall -Wextra -Werror -std=c99 -g
 
 SRCS = $(wildcard *.c)
-
 OBJS = $(SRCS:.c=.o)
 
 TARGET = maze
