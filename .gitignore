@@ -1,0 +1,19 @@
+# Build artefacts
+*.o
+/maze_game/maze
+
+# Test run leftovers
+/maze_game/out
+/maze_game/results
+
+# Python
+__pycache__/
+*.pyc
+
+# Archives and media
+*.zip
+*.mp4
+
+# Editor / OS
+.vscode/
+.DS_Store
