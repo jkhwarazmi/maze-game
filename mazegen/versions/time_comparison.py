@@ -1,5 +1,7 @@
 """
 A comparison of the time taken to generate mazes of the same size using different versions of the maze generation algorithm.
+
+Usage: python3 time_comparison.py <filepath> <rows> <cols>
 """
 
 from sys import argv
@@ -11,7 +13,7 @@ import maze_gen_v3 as v3
 import maze_gen_v4 as v4
 import maze_gen_v5 as v5
 import maze_gen_v6 as v6
-import mazegen as v7
+import maze_gen_v7 as v7
 
 if __name__ == "__main__":
 

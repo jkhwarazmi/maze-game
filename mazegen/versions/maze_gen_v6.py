@@ -56,10 +56,7 @@ class Maze:
         self.probability = 2 * (rows + cols) / 1000
 
         self.dfs()
-
-        # Completes 2x BFS to find the diameter of the tree/maze which will dictate start and end nodes
-        self.bfs()
-
+        
         # Randomly add spaces to the maze edges to make it appear more random
         self.randomise()
 

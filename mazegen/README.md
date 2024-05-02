@@ -1,9 +1,10 @@
 # Mazegen
 
-This is my maze generator, written in Python as an extension to my maze game.
+This is my maze generator, written in Python as an extension to my maze game. My oral presentation is available at: https://www.youtube.com/watch?v=T158J5Jon5w
 
 ## Folder Structure
 
+The project is organised such that the main files are in the root directory and previous iterations of my maze generation algorithm are in the `versions` directory so a progression can be observed.
 
 ```
 .

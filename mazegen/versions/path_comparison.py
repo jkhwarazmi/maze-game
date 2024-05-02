@@ -1,11 +1,13 @@
 """
 A comparison of the path length of the longest path in mazes of the same size w/ and w/out applying the BFS algorithm.
+
+Usage: pyhon3 <path_comparison.py> <filepath>
 """
 
 from sys import argv
 import time
 
-import mazegen as v7
+import maze_gen_v7 as v7
 
 if __name__ == "__main__":
 
@@ -21,7 +23,7 @@ if __name__ == "__main__":
         rows, cols, filepath = v7.check_args()
         rows, cols = 100, 100
         maze = v7.Maze(rows, cols)
-        path_lengths.append((maze.max_distance, maze.max_distance))
+        path_lengths.append((maze.max_distance_bfs, maze.max_distance_dfs))
 
     try:
         with open(argv[1], "w") as file:
