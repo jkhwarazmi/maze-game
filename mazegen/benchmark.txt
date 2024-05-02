@@ -1,0 +1,6 @@
+Average time to generate 5x5: 0.054 ms
+Average time to generate 10x10: 0.208 ms
+Average time to generate 20x20: 0.828 ms
+Average time to generate 50x50: 5.141 ms
+Average time to generate 80x80: 13.513 ms
+Average time to generate 100x100: 21.173 ms

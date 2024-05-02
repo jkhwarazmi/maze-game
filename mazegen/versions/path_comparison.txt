@@ -1,0 +1,12 @@
+Path Lengths of Longest Path in 100x100 Mazes using just DFS vs DFS and BFS
+Run 1: 311 difference (200.6%)
+Run 2: 329 difference (212.3%)
+Run 3: 374 difference (233.8%)
+Run 4: 214 difference (237.8%)
+Run 5: 334 difference (245.6%)
+Run 6: 287 difference (219.1%)
+Run 7: 433 difference (244.6%)
+Run 8: 236 difference (274.4%)
+Run 9: 328 difference (210.3%)
+Run 10: 267 difference (269.7%)
+Avg difference: 311.3 (234.8%)

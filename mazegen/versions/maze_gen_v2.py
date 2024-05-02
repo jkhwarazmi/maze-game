@@ -1,5 +1,25 @@
+"""
+Maze Generator v2
+
+- Generates a maze with a random start and end point w/ a distance apart of 10 - max(rows, cols)
+- Produces a path from start to end randomly moving in either x or y preferentially in diagonally opposite direction (a more random "semi-random" walk)
+- For anything besides the path, randomly generates a wall or empty space w/ equal probability
+- No research done on maze generation algorithms yet, just a basic idea
+
+Issues:
+- Paths can be very "clumpy" as the walk tends to converge on the same location as opposed to spirally like I intended
+- Thus paths tends to be even more obvious than v1 but there are more of them
+- Less variety in actual maze patterns
+- Also, bug so that it doesn't work for small mazes (dims < 7) but it's so bad that I'll just move onto v3
+
+Improvements:
+- Let's research solutions next
+"""
+
+
 from sys import argv
 from random import randint
+
 
 def main():
     if len(argv) != 4:
@@ -15,7 +35,7 @@ def main():
     try:
         cols = int(argv[3])
     except ValueError:
-        print("Error: Number of columns must be an integer")  
+        print("Error: Number of columns must be an integer")
         return 1
 
     if rows < 5 or rows > 100:
@@ -23,21 +43,20 @@ def main():
         return 1
 
     if cols < 5 or cols > 100:
-        print("Error: Number of columns must be between 5 and 100")  
+        print("Error: Number of columns must be between 5 and 100")
         return 1
-    
+
     try:
         with open(argv[1], "w"):
             pass
     except:
         print("Error: Could not write to file")
         return 1
-    
 
     start = [randint(0, rows - 1), randint(0, cols - 1)]
 
-    # Use quadrants because otherwise random converges on same location, preferntially move in a direction
-    quadrants = [[1, 2], 
+    # Use quadrants because otherwise random converges on same location, preferentially move in a direction
+    quadrants = [[1, 2],
                  [3, 4]]
     quadrant = quadrants[0 if start[0] < rows // 2 else 1][0 if start[1] < cols // 2 else 1]
 
@@ -64,11 +83,11 @@ def main():
                 pos[0] -= 1
             count += 1
         elif r < 5:
-            if upper: 
+            if upper:
                 pos[0] -= 1
             else:
                 pos[0] += 1
-        
+
         # Left/right
         elif r < 8:
             if left:
@@ -77,7 +96,7 @@ def main():
                 pos[1] -= 1
             count += 1
         else:
-            if left: 
+            if left:
                 pos[1] -= 1
             else:
                 pos[1] += 1
@@ -85,7 +104,7 @@ def main():
         # Don't allow out of bounds
         if pos[0] < 0:
             pos[0] = 0
-        
+
         if pos[0] >= rows:
             pos[0] = rows - 1
 
@@ -94,7 +113,7 @@ def main():
 
         if pos[1] >= cols:
             pos[1] = cols
-        
+
         if maze[pos[0]][pos[1]] != 'S':
             maze[pos[0]][pos[1]] = 'R'
 

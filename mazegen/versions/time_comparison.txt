@@ -1,0 +1,7 @@
+Version 1: Time to generate 10 100x100 mazes = 0.13587737083435059 seconds
+Version 2: Time to generate 10 100x100 mazes = 0.13275527954101562 seconds
+Version 3: Does not work above 45x45
+Version 4: Time to generate 10 100x100 mazes = 0.30345702171325684 seconds
+Version 5: Time to generate 10 100x100 mazes = 0.29967665672302246 seconds
+Version 6: Time to generate 10 100x100 mazes = 0.30263590812683105 seconds
+Version 7: Time to generate 10 100x100 mazes = 0.3330225944519043 seconds

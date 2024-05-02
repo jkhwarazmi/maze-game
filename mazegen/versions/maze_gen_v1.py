@@ -1,5 +1,24 @@
+"""
+Maze Generator v1
+
+- Generates a maze with a random start and end point w/ a distance apart of at least half the sum of the rows and columns
+- Produces a path from start to end randomly moving in either x or y in the direction of end (a "semi-random" walk)
+- For anything besides the path, randomly generates a wall or empty space w/ equal probability
+- No research done on maze generation algorithms yet, just a basic idea
+
+Issues:
+- Only 1 guarenteed path and it can be pretty obvious since it isn't very random
+- Solutions not very windy
+- Optimal/only (typically) solution is always a fixed (albeit semi-random) path length
+
+Improvements:
+- Let's try moving in more random directions as opposed to just towards the end point next
+"""
+
+
 from sys import argv
 from random import randint
+
 
 def main():
     if len(argv) != 4:
@@ -15,7 +34,7 @@ def main():
     try:
         cols = int(argv[3])
     except ValueError:
-        print("Error: Number of columns must be an integer")  
+        print("Error: Number of columns must be an integer")
         return 1
 
     if rows < 5 or rows > 100:
@@ -23,16 +42,16 @@ def main():
         return 1
 
     if cols < 5 or cols > 100:
-        print("Error: Number of columns must be between 5 and 100")  
+        print("Error: Number of columns must be between 5 and 100")
         return 1
-    
+
     try:
         with open(argv[1], "w"):
             pass
     except:
         print("Error: Could not write to file")
         return 1
-    
+
     start = [0, 0]
     end = [0, 0]
 
@@ -46,7 +65,7 @@ def main():
 
     pos = [start[0], start[1]]
 
-    while pos[0] != end[0] or pos[1] != end[1]:
+    while pos != end:
         r = randint(1, 2)
 
         if r == 1 and pos[1] != end[1]:

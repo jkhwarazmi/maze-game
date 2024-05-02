@@ -1,7 +1,7 @@
 /**
  * @file maze.c
  * @author Jamil Khwarazmi
- * @brief ADD BRIEF DESCRIPTION HERE
+ * @brief Maze source file - Used to create a maze from a file, validate and free it
  */
 
 #include <stdio.h>
@@ -9,23 +9,35 @@
 #include <string.h>
 #include "maze.h"
 
-// WHICH OF THESE FUNCTIONS ARE ACTUALLY USED (I.E. LOAD_MAZE ISN'T)
+/**
+ * @brief Initialises a maze object by setting specific attributes to -1 for validate_file
+ *
+ * @param maze Pointer to the maze to be initialised
+ */
+void init_maze(Maze *maze)
+{
+    maze->cols = -1;
+    maze->start[0] = -1;
+    maze->end[0] = -1;
+    maze->map = NULL;
+}
 
 /**
  * @brief Checks that the maze is within the required dimensions
- * 
+ *
  * @param dimension The dimension to check
  * @param type The type of dimension, either "height" or "width"
-*/
-int check_maze_dimensions(int dimension, char *type) 
+ * @return int 0 if the dimension is valid, 1 if it is not
+ */
+int check_maze_dimensions(int dimension, const char *type)
 {
-    if (dimension < MIN_DIM) 
+    if (dimension < MIN_DIM)
     {
         printf("Error: Maze must have minimum %s of %d\n", type, MIN_DIM);
         return 1;
     }
 
-    if (dimension > MAX_DIM) 
+    if (dimension > MAX_DIM)
     {
         printf("Error: Maze must have maximum %s of %d\n", type, MAX_DIM);
         return 1;
@@ -35,57 +47,32 @@ int check_maze_dimensions(int dimension, char *type)
 }
 
 /**
- * @brief Checks that the maze has exactly one start and one end
- * 
- * @param quantity The quantity of starts or ends
- * @param type The type of exit, either "start" or "end"
-*/
-int check_maze_exits(int quantity, char *type) 
-{
-    if (quantity != 1) 
-    {
-        printf("Error: Maze must have exactly one %s\n", type);
-        return 1;
-    }
-
-    return 0;
-}
-
-/**
  * @brief Checks that the maze is valid
- * 
- * @param maze The maze struct the maze is stored in
-*/
-int validate_file(FILE *file, Maze *maze) 
+ *
+ * @param file Pointer to the mazefile
+ * @param maze Pointer to the maze struct to store width and height
+ * @return int 0 if the maze is valid, 1 if it is not
+ */
+int validate_file(FILE *file, Maze *maze)
 {
-    // Set buffer to slightly over MAX_DIM to account for newlines and invalid mazes
-    // Split this up into further functions
-
+    // Set line buffer to slightly over MAX_DIM to account for newlines and invalid mazes
     int buffer = MAX_DIM + 10;
     char line[MAX_DIM + 10];
     int lines = 0;
 
-    // Set cols to -1 so it only changes for first line
-    maze->cols = -1;
-    
-    // Set number of start and end points to 0
-    int maze_starts = 0;
-    int maze_ends = 0;
-
-    // Set maze_over to 0, used to check if the maze has empty lines
+    // Set maze_over to 0, used to check if the maze has invalid empty lines
     int maze_over = 0;
 
-    // Read each line of the file and store it in the maze map
-    while (fgets(line, buffer, file) != NULL) 
+    while (fgets(line, buffer, file) != NULL)
     {
         lines++;
 
         // If any line is empty, any otherwise valid characters become invalid and set number of rows
-        if (line[0] == '\n') 
+        if (line[0] == '\n')
         {
+            // If the maze should have ended, do not allow further newlines
             if (maze_over == 1)
             {
-                printf("Error: Maze cannot end in multiple newlines\n");
                 return 1;
             }
 
@@ -94,167 +81,193 @@ int validate_file(FILE *file, Maze *maze)
             continue;
         }
 
-        // Manually calculate line length to remove invisible characters but use strlen for looping over all chars
+        // Manually calculate line length to ignore invisible characters but use strlen for looping over all chars
         int line_length = 0;
         int length = strlen(line);
 
-        for (int i = 0; i < length; i++) 
+        for (int i = 0; i < length; i++)
         {
-            // If any character is not a valid maze character, print error and exit
-            if ((line[i] != '#' && line[i] != ' ' && line[i] != 'S' && line[i] != 'E' && line[i] != '\n') || maze_over) 
+            // Check for invalid characters only if the maze is not over
+            if (maze_over || !(line[i] == '#' || line[i] == ' ' || line[i] == 'S' || line[i] == 'E' || line[i] == '\n'))
             {
-                printf("Error: Invalid characters in maze\n");
-                return 1;
+                return 2;
             }
 
-            // Increment line length for each character that is not a newline or set cols to first line length
-            if (line[i] != '\n') 
+            // Increment line length for each char that is not a newline or set cols to line length on first newline
+            if (line[i] != '\n')
             {
                 line_length++;
-            } 
-            else if (maze->cols == -1) 
+            }
+            else if (maze->cols == -1)
             {
                 maze->cols = line_length;
             }
 
-            // Increment number of starts and ends and set their positions in the maze
-            if (line[i] == 'S') 
+            // Check for multiple starts/ends or otherwise set their positions
+            if (line[i] == 'S')
             {
-                maze_starts++;
+                if (maze->start[0] != -1)
+                {
+                    return 3;
+                }
                 maze->start[0] = lines - 1;
                 maze->start[1] = i;
             }
-
-            if (line[i] == 'E') 
+            else if (line[i] == 'E')
             {
-                maze_ends++;
+                if (maze->end[0] != -1)
+                {
+                    return 4;
+                }
                 maze->end[0] = lines - 1;
                 maze->end[1] = i;
             }
         }
 
-            // If the line length is not equal to the first line length, print error and return
-            if (line_length != maze->cols) 
-            {
-                printf("Error: Maze must have constant width\n");
-                return 1;
-            }
+        // Check that the line length is constant
+        if (line_length != maze->cols)
+        {
+            return 5;
+        }
     }
-    
+
     // If maze didn't end in a newline, set number of rows
-    if (maze_over == 0) 
+    if (maze_over == 0)
     {
         maze->rows = lines;
     }
 
-    // Check number of rows, columns and exits if the maze is invalid
-    if (check_maze_dimensions(maze->rows, "height") || check_maze_dimensions(maze->cols, "width"))
+    // Check number of rows and columns and return if maze is not within the required dimensions
+    if (check_maze_dimensions(maze->rows, "height") == 1 || check_maze_dimensions(maze->cols, "width") == 1)
     {
-        return 1;
+        return 6;
     }
 
-    if (check_maze_exits(maze_starts, "start") || check_maze_exits(maze_ends, "end"))
+    // Check that the maze has a start and end
+    if (maze->start[0] == -1)
     {
-        return 1;
+        return 3;
+    }
+    else if (maze->end[0] == -1)
+    {
+        return 4;
     }
 
-    // Reset file pointer
     rewind(file);
     return 0;
 }
 
 /**
- * @brief Initialise a maze object - allocate memory and set attributes
+ * @brief Print a file error message based on the error code
  *
- * @param maze pointer to the maze to be initialised
+ * @param error_code The error code to print the message for
+ */
+void print_maze_error(int error_code)
+{
+    switch (error_code)
+    {
+        case 1:
+            printf("Error: Maze cannot end in multiple newlines\n");
+            return;
+        case 2:
+            printf("Error: Invalid characters in maze\n");
+            return;
+        case 3:
+            printf("Error: Maze must have exactly one start\n");
+            return;
+        case 4:
+            printf("Error: Maze must have exactly one end\n");
+            return;
+        case 5:
+            printf("Error: Maze must have constant width\n");
+            return;
+    }
+}
+
+/**
+ * @brief Initialise a maze's map matrix
+ *
+ * @param maze Pointer to the maze struct to be initialised
  * @return int 0 on success, 1 on fail
  */
 int create_maze(Maze *maze)
 {
-    if (maze == NULL) 
-    {
-        return 1;
-    }
-
     maze->map = malloc(maze->rows * sizeof(char *));
-    if (maze->map == NULL) 
+    if (maze->map == NULL)
     {
         return 1;
     }
 
-    for (int i = 0; i < maze->rows; i++) 
+    for (int i = 0; i < maze->rows; i++)
     {
         maze->map[i] = malloc(maze->cols * sizeof(char));
-        if (maze->map[i] == NULL) 
+        if (maze->map[i] == NULL)
         {
             return 1;
         }
     }
 
-    return 0;    
+    return 0;
+}
+
+/**
+ * @brief Read in a mazefile into the maze struct
+ *
+ * @param file Mazefile pointer
+ * @param maze Pointer to maze struct to fill
+ * @return int 0 on success, 1 on fail
+ */
+int read_maze(FILE *file, Maze *maze)
+{
+    for (int i = 0; i < maze->rows; i++)
+    {
+        for (int j = 0; j < maze->cols; j++)
+        {
+            char node = fgetc(file);
+
+            // Skip newlines and ensure file dimensions match maze dimensions
+            if (node == '\n')
+            {
+                j--;
+                continue;
+            }
+            else if (node == EOF)
+            {
+                return 1;
+            }
+
+            maze->map[i][j] = node;
+        }
+    }
+    return 0;
 }
 
 /**
  * @brief Free the memory allocated to the maze struct
  *
- * @param maze the pointer to the struct to free
+ * @param maze Pointer to the maze struct to free
  */
 void free_maze(Maze *maze)
 {
-    if (maze == NULL) 
+    if (maze == NULL)
     {
         return;
     }
 
-    if (maze->map != NULL) 
+    if (maze->map != NULL)
     {
         for (int i = 0; i < maze->rows; i++)
         {
-            free(maze->map[i]);
-            maze->map[i] = NULL;
+            if (maze->map[i] != NULL)
+            {
+                free(maze->map[i]);
+                maze->map[i] = NULL;
+            }
         }
-    }
 
-    free(maze->map);
-    maze->map = NULL;
+        free(maze->map);
+        maze->map = NULL;
+    }
 
     free(maze);
-}
-
-/**
- * @brief read in a maze file into a struct
- *
- * @param maze Maze struct to be used
- * @param file Mazefile pointer
- * @return int 0 on success, 1 on fail
- */
-int read_maze(Maze *maze, FILE *file)
-{
-    // Something like this, add extra validation
-    // Look at my original solution
-    if (maze == NULL || file == NULL) 
-    {
-        return 1;
-    }
-
-    for (int i = 0; i < maze->rows; i++) 
-    {
-        for (int j = 0; j < maze->cols; j++) 
-        {
-            char tile = fgetc(file);
-
-            if (tile == '\n') 
-            {
-                j--;
-                continue;
-            }
-            else if (tile == EOF)
-            {
-                return 1;
-            }
-
-            maze->map[i][j] = tile;
-        }
-    }
-    return 0;
 }
